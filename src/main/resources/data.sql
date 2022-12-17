@@ -19,7 +19,7 @@ CREATE TABLE transferencia
         REFERENCES conta(id_conta)
 );
 
-INSERT INTO conta (id_conta, nome_responsavel) VALUES (1,'Fulano');
+INSERT INTO CONTA (id_conta, nome_responsavel) VALUES (1,'Fulano');
 INSERT INTO conta (id_conta, nome_responsavel) VALUES (2,'Sicrano');
 
 INSERT INTO transferencia (id,data_transferencia, valor, tipo, nome_operador_transacao, conta_id) VALUES (1,'2019-01-01 12:00:00+03',30895.46,'DEPOSITO', null, 1);

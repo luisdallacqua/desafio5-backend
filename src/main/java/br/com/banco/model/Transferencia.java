@@ -1,24 +1,33 @@
 package br.com.banco.model;
 
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
+import javax.persistence.*;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
-@Data
+@Getter
+@Setter
 @NoArgsConstructor
 @AllArgsConstructor
+@Entity(name = "transferencia")
 public class Transferencia {
 
-    Long id;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
 
-    LocalDateTime transferDate;
+    private LocalDateTime dataTransferencia;
 
-    private BigDecimal amount;
-    private String type;
-    private String nameOfOperator;
-    Long conta_id;
+    @Column(nullable = false)
+    private BigDecimal valor;
+    private String tipo;
+    private String nomeOperadorTransacao;
+
+    @ManyToOne
+    @JoinColumn(name="conta_id", nullable = false)
+    private Conta conta;
+
+
 
 }

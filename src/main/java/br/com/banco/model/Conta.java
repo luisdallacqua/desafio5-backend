@@ -1,14 +1,40 @@
 package br.com.banco.model;
 
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
-@Data
+import javax.persistence.*;
+import java.util.List;
+
+@Getter
+@Setter
 @AllArgsConstructor
 @NoArgsConstructor
+@Entity(name = "conta")
 public class Conta {
 
-    private Long id;
-    private String name;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long idConta;
+    @Column(nullable = false)
+    private String nomeResponsavel;
+
+    public Conta(Long idConta, String nomeResponsavel) {
+        this.idConta = idConta;
+        this.nomeResponsavel = nomeResponsavel;
+    }
+
+    @OneToMany(
+             mappedBy = "conta",
+            cascade = CascadeType.ALL
+    )
+    private List<Transferencia> transferencias;
+
+
+    public List<Transferencia> getTransferencias() {
+        return transferencias;
+    }
+
+    public void setTransferencias(List<Transferencia> transferencias) {
+        this.transferencias = transferencias;
+    }
 }
