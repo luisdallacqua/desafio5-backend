@@ -16,12 +16,13 @@ public class Conta {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long idConta;
+    @Column(name="id_conta")
+    private Long id;
     @NotEmpty(message = "O nome do responsável não pode ser vazio")
     private String nomeResponsavel;
 
-    public Conta(Long idConta, String nomeResponsavel) {
-        this.idConta = idConta;
+    public Conta(Long id, String nomeResponsavel) {
+        this.id = id;
         this.nomeResponsavel = nomeResponsavel;
     }
 

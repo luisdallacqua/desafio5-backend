@@ -1,4 +1,4 @@
-package br.com.banco.dto;
+package br.com.banco.dto.Conta;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -11,8 +11,8 @@ import javax.validation.constraints.NotEmpty;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class ContaDTO {
-
+public class ContaPutDTO {
+    Long id;
     @NotEmpty(message = "The anime name cannot be empty ")
     private  String nomeResponsavel;
 }
