@@ -9,15 +9,16 @@ import java.util.List;
 
 @Repository
 public interface TransferenciaRepository extends JpaRepository<Transferencia, Long> {
-    public List<Transferencia> findTransferenciasByConta_Id(Long id);
-    public List<Transferencia> findTransferenciasByConta_IdAndNomeOperadorTransacao(Long id, String name);
+    List<Transferencia> findTransferenciasByConta_Id(Long id);
 
-    public List<Transferencia> findTransferenciasByConta_IdAndDataTransferenciaBetween(
+    List<Transferencia> findTransferenciasByConta_IdAndNomeOperadorTransacao(Long id, String name);
+
+    List<Transferencia> findTransferenciasByConta_IdAndDataTransferenciaBetween(
             Long id,
             ZonedDateTime beginDate,
             ZonedDateTime endDate);
 
-    public List<Transferencia> findTransferenciasByConta_IdAndNomeOperadorTransacaoAndDataTransferenciaBetween(
+    List<Transferencia> findTransferenciasByConta_IdAndNomeOperadorTransacaoAndDataTransferenciaBetween(
             Long id,
             String name,
             ZonedDateTime beginDate,

@@ -45,7 +45,7 @@ public class TransferenciaController {
             return ResponseEntity.ok(transferenciaService.listById(id, operador, dataInicio, dataFim));
         }
 
-        if(operador.equals("") && (dataInicio.getYear() != 1970 || dataFim.getYear() != 3000)){
+        if(operador.equals("") && (dataInicio.getYear() != 1970 || dataFim.getYear() != 2030)){
             return ResponseEntity.ok(transferenciaService.listById(id, dataInicio, dataFim));
         }
 
