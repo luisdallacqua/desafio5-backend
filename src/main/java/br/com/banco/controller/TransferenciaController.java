@@ -5,6 +5,8 @@ import br.com.banco.model.Transferencia;
 import br.com.banco.service.ContaService;
 import br.com.banco.service.TransferenciaService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -36,20 +38,21 @@ public class TransferenciaController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<List<Transferencia>> listById(
+    public ResponseEntity<Page<Transferencia>> listById(
+            Pageable pageable,
             @PathVariable Long id,
             @RequestParam(defaultValue = "1970-01-01") @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate dataInicio,
             @RequestParam(defaultValue = "2030-01-01") @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate dataFim,
             @RequestParam(defaultValue = "") String operador) {
         if (!operador.equals("") && (dataInicio.getYear() != 1970 || dataFim.getYear() != 2030)){
-            return ResponseEntity.ok(transferenciaService.listById(id, operador, dataInicio, dataFim));
+            return ResponseEntity.ok(transferenciaService.listById(pageable, id, operador, dataInicio, dataFim));
         }
 
         if(operador.equals("") && (dataInicio.getYear() != 1970 || dataFim.getYear() != 2030)){
-            return ResponseEntity.ok(transferenciaService.listById(id, dataInicio, dataFim));
+            return ResponseEntity.ok(transferenciaService.listById(pageable, id, dataInicio, dataFim));
         }
 
-        if (!operador.equals("")) return ResponseEntity.ok(transferenciaService.listById(id, operador));
-        return ResponseEntity.ok(transferenciaService.listById(id));
+        if (!operador.equals("")) return ResponseEntity.ok(transferenciaService.listById(pageable, id, operador));
+        return ResponseEntity.ok(transferenciaService.listById(pageable,id));
     }
 }
