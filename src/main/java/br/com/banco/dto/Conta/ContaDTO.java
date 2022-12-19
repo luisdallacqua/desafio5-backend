@@ -11,8 +11,8 @@ import javax.validation.constraints.NotEmpty;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class ContaPutDTO {
-    Long id;
+public class ContaDTO {
+
     @NotEmpty(message = "The anime name cannot be empty ")
     private  String nomeResponsavel;
 }

@@ -1,7 +1,6 @@
 package br.com.banco.controller;
 
-import br.com.banco.dto.Conta.ContaPostDTO;
-import br.com.banco.dto.Conta.ContaPutDTO;
+import br.com.banco.dto.Conta.ContaDTO;
 import br.com.banco.model.Conta;
 import br.com.banco.service.ContaService;
 import lombok.RequiredArgsConstructor;
@@ -30,8 +29,8 @@ public class ContaController {
     }
 
     @PostMapping
-    public ResponseEntity<Conta> save(@RequestBody @Valid ContaPostDTO contaPostDTO){
-        return new ResponseEntity<>(contaService.save(contaPostDTO), HttpStatus.CREATED);
+    public ResponseEntity<Conta> save(@RequestBody @Valid ContaDTO contaDTO){
+        return new ResponseEntity<>(contaService.save(contaDTO), HttpStatus.CREATED);
     }
 
     @DeleteMapping("/{id}")
@@ -40,9 +39,10 @@ public class ContaController {
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
-    @PutMapping()
-    public ResponseEntity<Void> replace(@RequestBody ContaPutDTO contaPutDTO) {
-        contaService.replace(contaPutDTO);
+    @PutMapping("/{id}")
+    public ResponseEntity<Void> replace(@PathVariable Long id,
+            @RequestBody ContaDTO contaDTO) {
+        contaService.replace(id, contaDTO);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 

@@ -1,7 +1,6 @@
 package br.com.banco.controller;
 
-import br.com.banco.dto.Conta.ContaPostDTO;
-import br.com.banco.dto.Conta.ContaPutDTO;
+import br.com.banco.dto.Conta.ContaDTO;
 import br.com.banco.model.Conta;
 import br.com.banco.service.ContaService;
 import org.assertj.core.api.Assertions;
@@ -32,7 +31,7 @@ class ContaControllerTest {
             .nomeResponsavel("Usuário 2")
             .id(2L)
             .build();
-    ContaPostDTO contaParaSerSalva = ContaPostDTO.builder()
+    ContaDTO contaParaSerSalva = ContaDTO.builder()
             .nomeResponsavel("Usuário 1")
             .build();
 
@@ -48,7 +47,7 @@ class ContaControllerTest {
         BDDMockito.when(contaServiceMock.listAll(ArgumentMatchers.any()))
                 .thenReturn(contas);
 
-        BDDMockito.when(contaServiceMock.save(ArgumentMatchers.any(ContaPostDTO.class)))
+        BDDMockito.when(contaServiceMock.save(ArgumentMatchers.any(ContaDTO.class)))
                 .thenReturn(contaValida1);
 
         BDDMockito.when(contaServiceMock.findByIdOrThrowAnException(1L))
@@ -105,12 +104,12 @@ class ContaControllerTest {
     @DisplayName("put deve retonar um 204 ao substituir a entidade, sem conteúdo e não lançar erro")
     void put_SubstituiUmaConta_QuandoBemSucedido() {
 
-        Assertions.assertThatCode(() ->contaController.replace(ContaPutDTO.builder()
+        Assertions.assertThatCode(() ->contaController.replace(1L, ContaDTO.builder()
                         .nomeResponsavel("Usuário substituído")
                         .build()))
                 .doesNotThrowAnyException();
 
-        ResponseEntity<Void> entity = contaController.replace(ContaPutDTO.builder()
+        ResponseEntity<Void> entity = contaController.replace(1L, ContaDTO.builder()
                 .nomeResponsavel("Usuário substituído")
                 .build());
 

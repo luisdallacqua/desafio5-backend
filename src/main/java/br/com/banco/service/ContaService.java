@@ -1,7 +1,6 @@
 package br.com.banco.service;
 
-import br.com.banco.dto.Conta.ContaPostDTO;
-import br.com.banco.dto.Conta.ContaPutDTO;
+import br.com.banco.dto.Conta.ContaDTO;
 import br.com.banco.mapper.ContaMapper;
 import br.com.banco.model.Conta;
 import br.com.banco.repository.ContaRepository;
@@ -16,8 +15,8 @@ public class ContaService {
 
     private final ContaRepository contaRepository;
 
-    public Conta save(ContaPostDTO contaPostDTO){
-        return contaRepository.save(ContaMapper.INSTANCE.toConta(contaPostDTO));
+    public Conta save(ContaDTO contaDTO){
+        return contaRepository.save(ContaMapper.INSTANCE.toConta(contaDTO));
     }
 
     public Page<Conta> listAll(Pageable pageable) {
@@ -33,10 +32,9 @@ public class ContaService {
         contaRepository.delete(findByIdOrThrowAnException(id));
     }
 
-
-    public void replace(ContaPutDTO contaPutDTO) {
-        Conta savedConta = findByIdOrThrowAnException(contaPutDTO.getId());
-        Conta conta = ContaMapper.INSTANCE.toConta(contaPutDTO);
+    public void replace(Long id, ContaDTO contaDTO) {
+        Conta savedConta = findByIdOrThrowAnException(id);
+        Conta conta = ContaMapper.INSTANCE.toConta(contaDTO);
         conta.setId(savedConta.getId());
         contaRepository.save(conta);
     }
