@@ -1,6 +1,8 @@
 package br.com.banco.service;
 
+import br.com.banco.dto.Transferencia.TransferenciaDTO;
 import br.com.banco.exceptions.BadRequestException;
+import br.com.banco.mapper.TransferenciaMapper;
 import br.com.banco.model.Transferencia;
 import br.com.banco.repository.ContaRepository;
 import br.com.banco.repository.TransferenciaRepository;
@@ -24,8 +26,8 @@ public class TransferenciaService {
         return transferenciaRepository.save(transferencia);
     }
 
-    public List<Transferencia> listAll() {
-        return transferenciaRepository.findAll();
+    public Page<Transferencia> listAll(Pageable pageable) {
+        return transferenciaRepository.findAll(pageable);
     }
 
     public Page<Transferencia> listById(Pageable pageable, Long id) {
@@ -51,11 +53,11 @@ public class TransferenciaService {
 
     public Page<Transferencia> listById(Pageable pageable, Long id, LocalDate dataInicio, LocalDate dataFim) {
         contaRepository.findById(id).orElseThrow(() -> new BadRequestException("Não existe usuário com esse id"));
-        return transferenciaRepository
+        return (transferenciaRepository
                 .findTransferenciasByConta_IdAndDataTransferenciaBetween(
                         pageable,
                         id,
                         dataInicio.atStartOfDay(ZoneId.systemDefault()),
-                        dataFim.atStartOfDay(ZoneId.systemDefault()));
+                        dataFim.atStartOfDay(ZoneId.systemDefault())));
     }
 }

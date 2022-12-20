@@ -1,5 +1,7 @@
 package br.com.banco.controller;
 
+import br.com.banco.dto.Transferencia.TransferenciaDTO;
+import br.com.banco.mapper.TransferenciaMapper;
 import br.com.banco.model.Conta;
 import br.com.banco.model.Transferencia;
 import br.com.banco.service.ContaService;
@@ -12,6 +14,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.time.LocalDate;
 import java.util.List;
 
@@ -24,17 +27,22 @@ public class TransferenciaController {
     private final TransferenciaService transferenciaService;
     private final ContaService contaService;
 
+    private final TransferenciaMapper transferenciaMapper;
+
 
     @PostMapping
-    public ResponseEntity<Transferencia> save(@RequestBody Transferencia transferencia) {
+    public ResponseEntity<Transferencia> save(@RequestBody @Valid Transferencia transferencia) {
         Conta conta = contaService.findByIdOrThrowAnException(transferencia.getConta().getId());
         transferencia.setConta(conta);
         return new ResponseEntity<>(transferenciaService.create(transferencia), HttpStatus.CREATED);
     }
 
     @GetMapping()
-    public ResponseEntity<List<Transferencia>> listAll() {
-        return ResponseEntity.ok(transferenciaService.listAll());
+    public ResponseEntity<Page<TransferenciaDTO>> listAll(Pageable pageable) {
+
+        return ResponseEntity.ok(transferenciaMapper.toRest(transferenciaService.listAll(pageable)));
+
+
     }
 
     @GetMapping("/{id}")

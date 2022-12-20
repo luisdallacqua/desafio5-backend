@@ -8,6 +8,7 @@ import com.fasterxml.jackson.datatype.jsr310.deser.LocalDateTimeDeserializer;
 import lombok.*;
 
 import javax.persistence.*;
+import javax.validation.constraints.Digits;
 import javax.validation.constraints.NotNull;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
@@ -25,18 +26,17 @@ public class Transferencia {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @NotNull(message="Start Date cannot be null")
-//    @JsonSerialize(using = ToStringSerializer.class)
-//    @JsonDeserialize(using = LocalDateTimeDeserializer.class)
-//    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss.SSS", locale = "en-US", timezone = "Brazil/East")
+    @NotNull(message="Data de transferência não pode ser Nulo")
     private ZonedDateTime dataTransferencia;
-
     @Column(nullable = false)
+    @Digits(integer = 10, fraction = 2)
     private BigDecimal valor;
+
+    @NotNull(message="Tipo da transção não pode ser nulo")
     private String tipo;
     private String nomeOperadorTransacao;
 
-    @ManyToOne(fetch = FetchType.EAGER)
+    @ManyToOne
     @JoinColumn(name="conta_id", referencedColumnName ="id_conta")
     private Conta conta;
 }
