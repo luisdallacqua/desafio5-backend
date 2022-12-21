@@ -50,17 +50,17 @@ public class ExceptionsHandler extends ResponseEntityExceptionHandler {
                         .build(), HttpStatus.BAD_REQUEST);
     }
 
-    @Override
-    protected ResponseEntity<Object> handleExceptionInternal(
-            Exception ex, @Nullable Object body, HttpHeaders headers, HttpStatus status, WebRequest request) {
-        ExceptionDetails exceptionDetails = ExceptionDetails.builder()
-                .timestamp(LocalDateTime.now())
-                .status(status.value())
-                .title(ex.getCause().getMessage())
-                .details(ex.getMessage())
-                .developerMessage(ex.getClass().getName())
-                .build();
-
-        return new ResponseEntity<>(exceptionDetails, headers, status);
-    }
+//    @Override
+//    protected ResponseEntity<Object> handleExceptionInternal(
+//            Exception ex, @Nullable Object body, HttpHeaders headers, HttpStatus status, WebRequest request) {
+//        ExceptionDetails exceptionDetails = ExceptionDetails.builder()
+//                .timestamp(LocalDateTime.now())
+//                .status(status.value())
+//                .title(ex.getCause().getMessage())
+//                .details(ex.getMessage())
+//                .developerMessage(ex.getClass().getName())
+//                .build();
+//
+//        return new ResponseEntity<>(exceptionDetails, headers, status);
+//    }
 }

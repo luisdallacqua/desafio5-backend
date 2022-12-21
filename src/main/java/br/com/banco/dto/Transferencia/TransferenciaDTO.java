@@ -1,6 +1,7 @@
 package br.com.banco.dto.Transferencia;
 
 import lombok.Builder;
+import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -12,8 +13,7 @@ import java.math.BigDecimal;
 import java.time.ZonedDateTime;
 
 @Builder
-@Getter
-@Setter
+@Data
 public class TransferenciaDTO {
     private Long id;
     @NotNull(message="Data de transferência não pode ser Nulo")

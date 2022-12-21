@@ -1,7 +1,6 @@
 package br.com.banco.controller;
 
 import br.com.banco.dto.Transferencia.TransferenciaDTO;
-import br.com.banco.mapper.TransferenciaMapper;
 import br.com.banco.model.Conta;
 import br.com.banco.model.Transferencia;
 import br.com.banco.service.ContaService;
@@ -16,7 +15,6 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import java.time.LocalDate;
-import java.util.List;
 
 @RestController
 @CrossOrigin
@@ -27,11 +25,9 @@ public class TransferenciaController {
     private final TransferenciaService transferenciaService;
     private final ContaService contaService;
 
-    private final TransferenciaMapper transferenciaMapper;
-
 
     @PostMapping
-    public ResponseEntity<Transferencia> save(@RequestBody @Valid Transferencia transferencia) {
+    public ResponseEntity<Transferencia> create(@RequestBody @Valid Transferencia transferencia) {
         Conta conta = contaService.findByIdOrThrowAnException(transferencia.getConta().getId());
         transferencia.setConta(conta);
         return new ResponseEntity<>(transferenciaService.create(transferencia), HttpStatus.CREATED);
@@ -39,28 +35,42 @@ public class TransferenciaController {
 
     @GetMapping()
     public ResponseEntity<Page<TransferenciaDTO>> listAll(Pageable pageable) {
-
-        return ResponseEntity.ok(transferenciaMapper.toRest(transferenciaService.listAll(pageable)));
-
-
+        return ResponseEntity.ok(transferenciaService.listAll(pageable));
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Page<Transferencia>> listById(
+    public ResponseEntity<Page<TransferenciaDTO>> listByContaId(
             Pageable pageable,
             @PathVariable Long id,
-            @RequestParam(defaultValue = "1970-01-01") @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate dataInicio,
-            @RequestParam(defaultValue = "2030-01-01") @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate dataFim,
-            @RequestParam(defaultValue = "") String operador) {
-        if (!operador.equals("") && (dataInicio.getYear() != 1970 || dataFim.getYear() != 2030)){
-            return ResponseEntity.ok(transferenciaService.listById(pageable, id, operador, dataInicio, dataFim));
+            @RequestParam(required = false, defaultValue = "1970-01-01") @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate dataInicio,
+            @RequestParam(required = false, defaultValue = "2030-01-01") @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate dataFim,
+            @RequestParam(required = false, defaultValue = "") String operador) {
+        if (!operador.equals("") && (dataInicio.getYear() != 1970 || dataFim.getYear() != 2030)) {
+            return ResponseEntity.ok(
+                    transferenciaService
+                            .listTransferenciasByConta_IdAndNomeOperadorTransacaoAndDataTransferenciaBetween(
+                                    pageable,
+                                    id,
+                                    dataInicio,
+                                    dataFim,
+                                    operador)
+            );
         }
 
-        if(operador.equals("") && (dataInicio.getYear() != 1970 || dataFim.getYear() != 2030)){
-            return ResponseEntity.ok(transferenciaService.listById(pageable, id, dataInicio, dataFim));
+        if (operador.equals("") && (dataInicio.getYear() != 1970 || dataFim.getYear() != 2030)) {
+            return ResponseEntity.ok(
+                    transferenciaService
+                            .listTransferenciasByConta_IdAndDataTransferenciaBetween(
+                                    pageable,
+                                    id,
+                                    dataInicio,
+                                    dataFim)
+            );
         }
 
-        if (!operador.equals("")) return ResponseEntity.ok(transferenciaService.listById(pageable, id, operador));
-        return ResponseEntity.ok(transferenciaService.listById(pageable,id));
+        if (!operador.equals(""))
+            return ResponseEntity.ok(transferenciaService
+                    .listTransferenciasByConta_IdAndNomeOperadorTransacao(pageable, id, operador));
+        return ResponseEntity.ok(transferenciaService.listByContaId(pageable, id));
     }
 }

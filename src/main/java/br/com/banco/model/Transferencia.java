@@ -1,11 +1,13 @@
 package br.com.banco.model;
 
+import br.com.banco.dto.Transferencia.TransferenciaDTO;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
 import com.fasterxml.jackson.datatype.jsr310.deser.LocalDateTimeDeserializer;
 import lombok.*;
+import org.springframework.data.domain.Page;
 
 import javax.persistence.*;
 import javax.validation.constraints.Digits;
@@ -17,6 +19,7 @@ import java.time.ZonedDateTime;
 
 @Getter
 @Setter
+@Builder
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity(name = "transferencia")
@@ -39,4 +42,5 @@ public class Transferencia {
     @ManyToOne
     @JoinColumn(name="conta_id", referencedColumnName ="id_conta")
     private Conta conta;
+
 }

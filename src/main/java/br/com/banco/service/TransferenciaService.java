@@ -13,7 +13,7 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
 import java.time.ZoneId;
-import java.util.List;
+import java.time.ZonedDateTime;
 
 @RequiredArgsConstructor
 @Service
@@ -22,42 +22,55 @@ public class TransferenciaService {
     private final TransferenciaRepository transferenciaRepository;
     private final ContaRepository contaRepository;
 
-    public Transferencia create(Transferencia transferencia){
+    public Transferencia create(Transferencia transferencia) {
         return transferenciaRepository.save(transferencia);
     }
 
-    public Page<Transferencia> listAll(Pageable pageable) {
-        return transferenciaRepository.findAll(pageable);
+    public Page<TransferenciaDTO> listAll(Pageable pageable) {
+        return TransferenciaMapper.INSTANCE.toRest(transferenciaRepository.findAll(pageable));
     }
 
-    public Page<Transferencia> listById(Pageable pageable, Long id) {
+    public Page<TransferenciaDTO> listByContaId(Pageable pageable, Long id) {
         contaRepository.findById(id).orElseThrow(() -> new BadRequestException("Não existe usuário com esse id"));
-        return transferenciaRepository.findTransferenciasByConta_Id(pageable,id);
+        return TransferenciaMapper.INSTANCE.toRest(transferenciaRepository.findTransferenciasByConta_Id(pageable, id));
     }
 
-    public Page<Transferencia> listById(Pageable pageable,Long id, String operador) {
+    public Page<TransferenciaDTO> listTransferenciasByConta_IdAndNomeOperadorTransacao(Pageable pageable, Long id, String operador) {
         contaRepository.findById(id).orElseThrow(() -> new BadRequestException("Não existe usuário com esse id"));
-        return transferenciaRepository.findTransferenciasByConta_IdAndNomeOperadorTransacao(pageable,id, operador);
+        return TransferenciaMapper.INSTANCE.toRest(transferenciaRepository.findTransferenciasByConta_IdAndNomeOperadorTransacao(pageable, id, operador));
     }
 
-    public Page<Transferencia> listById(Pageable pageable,Long id, String operador, LocalDate dataInicio, LocalDate dataFim) {
+    public Page<TransferenciaDTO> listTransferenciasByConta_IdAndDataTransferenciaBetween(
+            Pageable pageable,
+            Long id,
+            LocalDate dataInicio,
+            LocalDate dataFim
+    ) {
         contaRepository.findById(id).orElseThrow(() -> new BadRequestException("Não existe usuário com esse id"));
-        return transferenciaRepository
-                .findTransferenciasByConta_IdAndNomeOperadorTransacaoAndDataTransferenciaBetween(
-                        pageable,
-                        id,
-                        operador,
-                        dataInicio.atStartOfDay(ZoneId.systemDefault()),
-                        dataFim.atStartOfDay(ZoneId.systemDefault()));
-    }
 
-    public Page<Transferencia> listById(Pageable pageable, Long id, LocalDate dataInicio, LocalDate dataFim) {
-        contaRepository.findById(id).orElseThrow(() -> new BadRequestException("Não existe usuário com esse id"));
-        return (transferenciaRepository
+        return TransferenciaMapper.INSTANCE.toRest(transferenciaRepository
                 .findTransferenciasByConta_IdAndDataTransferenciaBetween(
                         pageable,
                         id,
                         dataInicio.atStartOfDay(ZoneId.systemDefault()),
                         dataFim.atStartOfDay(ZoneId.systemDefault())));
+    }
+
+    public Page<TransferenciaDTO> listTransferenciasByConta_IdAndNomeOperadorTransacaoAndDataTransferenciaBetween(
+            Pageable pageable,
+            Long id,
+            LocalDate dataInicio,
+            LocalDate dataFim,
+            String operador
+    ) {
+        contaRepository.findById(id).orElseThrow(() -> new BadRequestException("Não existe usuário com esse id"));
+        ZonedDateTime dataInicioFormatted = dataInicio.atStartOfDay(ZoneId.systemDefault());
+        ZonedDateTime dataFimFormatted = dataFim.atStartOfDay(ZoneId.systemDefault());
+        return TransferenciaMapper.INSTANCE.toRest(transferenciaRepository.findTransferenciasByConta_IdAndNomeOperadorTransacaoAndDataTransferenciaBetween(
+                pageable,
+                id,
+                dataInicioFormatted,
+                dataFimFormatted,
+                operador));
     }
 }

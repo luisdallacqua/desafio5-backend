@@ -16,14 +16,16 @@ public interface TransferenciaRepository extends JpaRepository<Transferencia, Lo
     Page<Transferencia> findTransferenciasByConta_IdAndNomeOperadorTransacao(Pageable pageable, Long id, String name);
 
     Page<Transferencia> findTransferenciasByConta_IdAndDataTransferenciaBetween(
-            Pageable pageable, Long id,
+            Pageable pageable,
+            Long id,
             ZonedDateTime beginDate,
             ZonedDateTime endDate);
 
     Page<Transferencia> findTransferenciasByConta_IdAndNomeOperadorTransacaoAndDataTransferenciaBetween(
-            Pageable pageable, Long id,
-            String name,
+            Pageable pageable,
+            Long id,
             ZonedDateTime beginDate,
-            ZonedDateTime endDate
+            ZonedDateTime endDate,
+            String name
     );
 }

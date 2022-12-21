@@ -2,6 +2,7 @@ package br.com.banco.controller;
 
 import br.com.banco.model.Conta;
 import br.com.banco.service.ContaService;
+import br.com.banco.util.ContaCreator;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -19,17 +20,6 @@ import java.util.List;
 
 @ExtendWith(SpringExtension.class)
 class ContaControllerTest {
-
-    Conta contaValida1 = Conta.builder()
-            .nomeResponsavel("Usuário 1")
-            .id(1L)
-            .build();
-    Conta contaValida2 = Conta.builder()
-            .nomeResponsavel("Usuário 2")
-            .id(2L)
-            .build();
-
-
     @InjectMocks
     private ContaController contaController;
 
@@ -38,12 +28,12 @@ class ContaControllerTest {
 
     @BeforeEach
     void setup() {
-        PageImpl<Conta> contas = new PageImpl<>(List.of(contaValida1, contaValida2));
+        PageImpl<Conta> contas = new PageImpl<>(List.of(ContaCreator.createConta(), ContaCreator.createConta2()));
         BDDMockito.when(contaServiceMock.listAll(ArgumentMatchers.any()))
                 .thenReturn(contas);
 
         BDDMockito.when(contaServiceMock.findByIdOrThrowAnException(1L))
-                .thenReturn(contaValida1);
+                .thenReturn(ContaCreator.createConta());
     }
 
     @Test
@@ -61,14 +51,12 @@ class ContaControllerTest {
     @Test
     @DisplayName("findById retorna uma conta específica quando bem sucedido")
     void findById_RetornaUmaConta_QuandoBemSucedido() {
-        Long expectedId = contaValida1.getId();
+        Long expectedId = ContaCreator.createConta().getId();
 
         Conta conta = contaController.findById(1L).getBody();
 
         Assertions.assertThat(conta.getId()).isNotNull().isEqualTo(expectedId);
     }
-
-
 
 
 }
