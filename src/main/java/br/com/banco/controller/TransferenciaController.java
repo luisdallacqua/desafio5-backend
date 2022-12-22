@@ -5,7 +5,10 @@ import br.com.banco.model.Conta;
 import br.com.banco.model.Transferencia;
 import br.com.banco.service.ContaService;
 import br.com.banco.service.TransferenciaService;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import lombok.RequiredArgsConstructor;
+import org.springdoc.api.annotations.ParameterObject;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.format.annotation.DateTimeFormat;
@@ -34,12 +37,17 @@ public class TransferenciaController {
     }
 
     @GetMapping()
-    public ResponseEntity<Page<TransferenciaDTO>> listAll(Pageable pageable) {
+    public ResponseEntity<Page<TransferenciaDTO>> listAll(@ParameterObject Pageable pageable) {
         return ResponseEntity.ok(transferenciaService.listAll(pageable));
     }
 
     @GetMapping("/{id}")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Return a Pageable List of Transfer if Successfull Operation"),
+            @ApiResponse(responseCode = "400", description = "If count related to transfer is not found")
+    })
     public ResponseEntity<Page<TransferenciaDTO>> listByContaId(
+            @ParameterObject
             Pageable pageable,
             @PathVariable Long id,
             @RequestParam(required = false, defaultValue = "1970-01-01") @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate dataInicio,
@@ -66,9 +74,10 @@ public class TransferenciaController {
                                     dataFim)
             );
         }
-        if (!operador.equals(""))
+        if (!operador.equals("")) {
             return ResponseEntity.ok(transferenciaService
                     .listTransferenciasByConta_IdAndNomeOperadorTransacao(pageable, id, operador));
+        }
         return ResponseEntity.ok(transferenciaService.listByContaId(pageable, id));
     }
 }

@@ -12,7 +12,6 @@ public interface TransferenciaMapper {
    TransferenciaMapper INSTANCE = Mappers.getMapper(TransferenciaMapper.class);
     TransferenciaDTO toRest(Transferencia transferencia);
 
-
     default public Page<TransferenciaDTO> toRest(Page<Transferencia> page) {
         return page.map(this::toRest);
     }
