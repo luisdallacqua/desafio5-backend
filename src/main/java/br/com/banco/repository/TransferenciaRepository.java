@@ -23,8 +23,8 @@ public interface TransferenciaRepository extends JpaRepository<Transferencia, Lo
     Page<Transferencia> findTransferenciasByConta_IdAndNomeOperadorTransacaoAndDataTransferenciaBetween(
             Pageable pageable,
             Long id,
+            String name,
             ZonedDateTime beginDate,
-            ZonedDateTime endDate,
-            String name
+            ZonedDateTime endDate
     );
 }

@@ -63,17 +63,18 @@ public class TransferenciaService {
     public Page<TransferenciaDTO> listTransferenciasByConta_IdAndNomeOperadorTransacaoAndDataTransferenciaBetween(
             Pageable pageable,
             Long id,
+            String operador,
             LocalDate dataInicio,
-            LocalDate dataFim,
-            String operador
+            LocalDate dataFim
     ) {
         contaRepository.findById(id).orElseThrow(() -> new BadRequestException("Não existe usuário com esse id"));
         return TransferenciaMapper.INSTANCE.toRest(
                 transferenciaRepository.findTransferenciasByConta_IdAndNomeOperadorTransacaoAndDataTransferenciaBetween(
                         pageable,
                         id,
+                        operador,
                         dataInicio.atStartOfDay(ZoneId.systemDefault()),
-                        dataFim.atStartOfDay(ZoneId.systemDefault()),
-                        operador));
+                        dataFim.atStartOfDay(ZoneId.systemDefault())
+                        ));
     }
 }

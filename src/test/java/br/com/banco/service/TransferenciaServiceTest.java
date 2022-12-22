@@ -79,9 +79,10 @@ class TransferenciaServiceTest {
         BDDMockito.given(transferenciaRepositoryMock.findTransferenciasByConta_IdAndNomeOperadorTransacaoAndDataTransferenciaBetween(
                         ArgumentMatchers.any(PageRequest.class),
                         ArgumentMatchers.anyLong(),
+                        ArgumentMatchers.eq("Fulano"),
                         ArgumentMatchers.eq(DateUtilTest.DATE_2019),
-                        ArgumentMatchers.eq(DateUtilTest.DATE_2020),
-                        ArgumentMatchers.eq("Fulano")))
+                        ArgumentMatchers.eq(DateUtilTest.DATE_2020))
+                )
                 .willReturn(transferenciaSWithOperatorAnd2020);
 
     }
@@ -134,6 +135,7 @@ class TransferenciaServiceTest {
         Assertions.assertThat(transferencias.toList().get(0).getValor()).isEqualTo(new BigDecimal("30895.46"));
         Assertions.assertThat(transferencias.toList().get(0).getNomeOperadorTransacao()).isEqualTo("Beltrano");
     }
+
     @Test
     @DisplayName("return pageable of List transferencias based in contaId, date range and operador")
     void listByContaWithContaIdAndNomeOperadorTransacaoAndDataTransferenciaBetween_ReturnsListOfTransfer_WhenSuccessful() {
@@ -143,9 +145,9 @@ class TransferenciaServiceTest {
                 .listTransferenciasByConta_IdAndNomeOperadorTransacaoAndDataTransferenciaBetween(
                         PageRequest.of(0, 5),
                         conta.getId(),
+                        TransferenciaCreator.transferenciaDTOSWithOperatorAnd2020().getNomeOperadorTransacao(),
                         LocalDate.parse("2019-01-01"),
-                        LocalDate.parse("2020-01-01"),
-                        TransferenciaCreator.transferenciaDTOSWithOperatorAnd2020().getNomeOperadorTransacao());
+                        LocalDate.parse("2020-01-01"));
 
         Assertions.assertThat(transferencias.toList()).isNotNull().isNotEmpty().hasSize(1);
         Assertions.assertThat(transferencias.toList().get(0).getValor()).isEqualTo(new BigDecimal("30895.46"));
@@ -154,11 +156,11 @@ class TransferenciaServiceTest {
 
     @Test
     @DisplayName("findByIdOrThrowBadRequestException throws BadRequestException when conta is not found")
-    void findByIdOrThrowBadRequestException_ThrowsBadRequestException_WhenAnimeIsNotFound(){
+    void findByIdOrThrowBadRequestException_ThrowsBadRequestException_WhenAnimeIsNotFound() {
         Conta conta = ContaCreator.createContaInexistente();
 
         Assertions.assertThatExceptionOfType(BadRequestException.class)
-                .isThrownBy(() -> transferenciaService.listByContaId(null , conta.getId()));
+                .isThrownBy(() -> transferenciaService.listByContaId(null, conta.getId()));
     }
 
 

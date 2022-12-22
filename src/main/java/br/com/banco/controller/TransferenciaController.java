@@ -51,9 +51,9 @@ public class TransferenciaController {
                             .listTransferenciasByConta_IdAndNomeOperadorTransacaoAndDataTransferenciaBetween(
                                     pageable,
                                     id,
+                                    operador,
                                     dataInicio,
-                                    dataFim,
-                                    operador)
+                                    dataFim)
             );
         }
         if (operador.equals("") && (dataInicio.getYear() != 1970 || dataFim.getYear() != 2030)) {

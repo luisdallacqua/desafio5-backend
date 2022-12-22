@@ -64,11 +64,11 @@ class TransferenciaControllerTest {
 
         BDDMockito.when(transferenciaService
                         .listTransferenciasByConta_IdAndNomeOperadorTransacaoAndDataTransferenciaBetween(ArgumentMatchers.any(),
-                        ArgumentMatchers.eq(1L),
-                        ArgumentMatchers.eq(LocalDate.parse("2020-01-01")),
-                        ArgumentMatchers.eq(LocalDate.parse("2022-01-01")),
-                        ArgumentMatchers.eq("Fulano")
-                ))
+                                ArgumentMatchers.eq(1L),
+                                ArgumentMatchers.eq("Fulano"),
+                                ArgumentMatchers.eq(LocalDate.parse("2020-01-01")),
+                                ArgumentMatchers.eq(LocalDate.parse("2022-01-01"))
+                        ))
                 .thenReturn(transferenciaDTOSWithOperatorAnd2020);
 
     }
