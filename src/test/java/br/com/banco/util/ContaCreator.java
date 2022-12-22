@@ -16,4 +16,10 @@ public class ContaCreator {
                 .id(2L)
                 .build();
     }
+    public static Conta createContaInexistente(){
+        return Conta.builder()
+                .nomeResponsavel("Inexistente")
+                .id(3L)
+                .build();
+    }
 }

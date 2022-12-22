@@ -6,7 +6,7 @@ import br.com.banco.model.Transferencia;
 
 import java.math.BigDecimal;
 
-import static br.com.banco.util.DateFormatter.*;
+import static br.com.banco.util.DateUtilTest.*;
 
 public class TransferenciaCreator {
 

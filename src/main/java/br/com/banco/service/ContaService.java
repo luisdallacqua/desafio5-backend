@@ -1,5 +1,6 @@
 package br.com.banco.service;
 
+import br.com.banco.exceptions.BadRequestException;
 import br.com.banco.model.Conta;
 import br.com.banco.repository.ContaRepository;
 import lombok.RequiredArgsConstructor;
@@ -18,6 +19,6 @@ public class ContaService {
 
     public Conta findByIdOrThrowAnException(long id) {
         return contaRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Usuário não encontrado"));
+                .orElseThrow(() -> new BadRequestException("Não existe usuário com esse id"));
     }
 }

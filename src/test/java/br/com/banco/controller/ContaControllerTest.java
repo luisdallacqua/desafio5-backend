@@ -22,7 +22,6 @@ import java.util.List;
 class ContaControllerTest {
     @InjectMocks
     private ContaController contaController;
-
     @Mock
     private ContaService contaServiceMock;
 
@@ -37,19 +36,19 @@ class ContaControllerTest {
     }
 
     @Test
-    @DisplayName("List all deve retornar uma lista de contas quando bem sucedido")
+    @DisplayName("List all should return a Page List of contas")
     void list_RetornaUmaListaDeContas_QuandoBemSucedido() {
         Page<Conta> contas = contaController.list(null).getBody();
 
         Assertions.assertThat(contas.toList()).isNotNull().hasSize(2);
         Assertions.assertThat(contas.toList().get(0).getId()).isEqualTo(1L);
-        Assertions.assertThat(contas.toList().get(0).getNomeResponsavel()).isEqualTo("Usuário 1");
+        Assertions.assertThat(contas.toList().get(0).getNomeResponsavel()).isEqualTo("Fulano");
         Assertions.assertThat(contas.toList().get(1).getId()).isEqualTo(2L);
-        Assertions.assertThat(contas.toList().get(1).getNomeResponsavel()).isEqualTo("Usuário 2");
+        Assertions.assertThat(contas.toList().get(1).getNomeResponsavel()).isEqualTo("Sicrano");
     }
 
     @Test
-    @DisplayName("findById retorna uma conta específica quando bem sucedido")
+    @DisplayName("findById should return specific conta")
     void findById_RetornaUmaConta_QuandoBemSucedido() {
         Long expectedId = ContaCreator.createConta().getId();
 

@@ -56,7 +56,6 @@ public class TransferenciaController {
                                     operador)
             );
         }
-
         if (operador.equals("") && (dataInicio.getYear() != 1970 || dataFim.getYear() != 2030)) {
             return ResponseEntity.ok(
                     transferenciaService
@@ -67,7 +66,6 @@ public class TransferenciaController {
                                     dataFim)
             );
         }
-
         if (!operador.equals(""))
             return ResponseEntity.ok(transferenciaService
                     .listTransferenciasByConta_IdAndNomeOperadorTransacao(pageable, id, operador));

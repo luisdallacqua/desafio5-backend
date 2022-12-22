@@ -13,7 +13,6 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
 import java.time.ZoneId;
-import java.time.ZonedDateTime;
 
 @RequiredArgsConstructor
 @Service
@@ -35,9 +34,14 @@ public class TransferenciaService {
         return TransferenciaMapper.INSTANCE.toRest(transferenciaRepository.findTransferenciasByConta_Id(pageable, id));
     }
 
-    public Page<TransferenciaDTO> listTransferenciasByConta_IdAndNomeOperadorTransacao(Pageable pageable, Long id, String operador) {
+    public Page<TransferenciaDTO> listTransferenciasByConta_IdAndNomeOperadorTransacao(
+            Pageable pageable,
+            Long id,
+            String operador
+    ) {
         contaRepository.findById(id).orElseThrow(() -> new BadRequestException("Não existe usuário com esse id"));
-        return TransferenciaMapper.INSTANCE.toRest(transferenciaRepository.findTransferenciasByConta_IdAndNomeOperadorTransacao(pageable, id, operador));
+        return TransferenciaMapper.INSTANCE.toRest(
+                transferenciaRepository.findTransferenciasByConta_IdAndNomeOperadorTransacao(pageable, id, operador));
     }
 
     public Page<TransferenciaDTO> listTransferenciasByConta_IdAndDataTransferenciaBetween(
@@ -64,13 +68,12 @@ public class TransferenciaService {
             String operador
     ) {
         contaRepository.findById(id).orElseThrow(() -> new BadRequestException("Não existe usuário com esse id"));
-        ZonedDateTime dataInicioFormatted = dataInicio.atStartOfDay(ZoneId.systemDefault());
-        ZonedDateTime dataFimFormatted = dataFim.atStartOfDay(ZoneId.systemDefault());
-        return TransferenciaMapper.INSTANCE.toRest(transferenciaRepository.findTransferenciasByConta_IdAndNomeOperadorTransacaoAndDataTransferenciaBetween(
-                pageable,
-                id,
-                dataInicioFormatted,
-                dataFimFormatted,
-                operador));
+        return TransferenciaMapper.INSTANCE.toRest(
+                transferenciaRepository.findTransferenciasByConta_IdAndNomeOperadorTransacaoAndDataTransferenciaBetween(
+                        pageable,
+                        id,
+                        dataInicio.atStartOfDay(ZoneId.systemDefault()),
+                        dataFim.atStartOfDay(ZoneId.systemDefault()),
+                        operador));
     }
 }

@@ -1,9 +1,6 @@
 package br.com.banco.dto.Transferencia;
 
-import lombok.Builder;
-import lombok.Data;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 
 import javax.persistence.Column;
 import javax.validation.constraints.Digits;
@@ -14,6 +11,7 @@ import java.time.ZonedDateTime;
 
 @Builder
 @Data
+@AllArgsConstructor
 public class TransferenciaDTO {
     private Long id;
     @NotNull(message="Data de transferência não pode ser Nulo")
@@ -23,7 +21,7 @@ public class TransferenciaDTO {
     private BigDecimal valor;
 
     @NotNull(message="Tipo da transção não pode ser nulo")
-    @Size(max = 15, message = "O tamanho máximo do tipo da transação é 15 caracteres")
+    @Size(max = 20, message = "O tamanho máximo do tipo da transação é 15 caracteres")
     private String tipo;
     private String nomeOperadorTransacao;
 }

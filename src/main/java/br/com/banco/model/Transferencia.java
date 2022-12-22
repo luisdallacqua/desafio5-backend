@@ -1,20 +1,11 @@
 package br.com.banco.model;
 
-import br.com.banco.dto.Transferencia.TransferenciaDTO;
-import com.fasterxml.jackson.annotation.JsonFormat;
-import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
-import com.fasterxml.jackson.databind.annotation.JsonSerialize;
-import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
-import com.fasterxml.jackson.datatype.jsr310.deser.LocalDateTimeDeserializer;
 import lombok.*;
-import org.springframework.data.domain.Page;
 
 import javax.persistence.*;
 import javax.validation.constraints.Digits;
 import javax.validation.constraints.NotNull;
 import java.math.BigDecimal;
-import java.time.LocalDateTime;
-import java.time.OffsetDateTime;
 import java.time.ZonedDateTime;
 
 @Getter
@@ -40,6 +31,7 @@ public class Transferencia {
     private String nomeOperadorTransacao;
 
     @ManyToOne
+    @NotNull(message="Conta da transação não pode ser nulo")
     @JoinColumn(name="conta_id", referencedColumnName ="id_conta")
     private Conta conta;
 

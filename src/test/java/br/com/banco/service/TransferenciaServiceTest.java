@@ -1,11 +1,13 @@
 package br.com.banco.service;
 
 import br.com.banco.dto.Transferencia.TransferenciaDTO;
+import br.com.banco.exceptions.BadRequestException;
 import br.com.banco.model.Conta;
 import br.com.banco.model.Transferencia;
 import br.com.banco.repository.ContaRepository;
 import br.com.banco.repository.TransferenciaRepository;
 import br.com.banco.util.ContaCreator;
+import br.com.banco.util.DateUtilTest;
 import br.com.banco.util.TransferenciaCreator;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
@@ -23,11 +25,8 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
-import java.time.ZoneId;
 import java.util.List;
 import java.util.Optional;
-
-import static br.com.banco.util.DateFormatter.formatDateToZonaDateTime;
 
 @ExtendWith(SpringExtension.class)
 class TransferenciaServiceTest {
@@ -50,8 +49,11 @@ class TransferenciaServiceTest {
         PageImpl<Transferencia> transferenciaSWithOperatorAnd2020 = new PageImpl<>(
                 List.of(TransferenciaCreator.createTransferenciaWithOperator()));
 
-        BDDMockito.when(contaRepositoryMock.findById(ArgumentMatchers.anyLong()))
+        BDDMockito.when(contaRepositoryMock.findById(ArgumentMatchers.eq(1L)))
                 .thenReturn(Optional.of(conta));
+
+        BDDMockito.when(contaRepositoryMock.findById(ArgumentMatchers.eq(3L)))
+                .thenReturn(Optional.empty());
 
         BDDMockito.when(transferenciaRepositoryMock.save(ArgumentMatchers.any(Transferencia.class)))
                 .thenReturn(TransferenciaCreator.createTransferencia());
@@ -67,10 +69,25 @@ class TransferenciaServiceTest {
                         ArgumentMatchers.eq("Fulano")))
                 .thenReturn(transferenciaSWithOperatorAnd2020);
 
+        BDDMockito.given(transferenciaRepositoryMock.findTransferenciasByConta_IdAndDataTransferenciaBetween(
+                        ArgumentMatchers.any(PageRequest.class),
+                        ArgumentMatchers.anyLong(),
+                        ArgumentMatchers.eq(DateUtilTest.DATE_2019),
+                        ArgumentMatchers.eq(DateUtilTest.DATE_2020)))
+                .willReturn(transferenciaSWithOperatorAnd2020);
+
+        BDDMockito.given(transferenciaRepositoryMock.findTransferenciasByConta_IdAndNomeOperadorTransacaoAndDataTransferenciaBetween(
+                        ArgumentMatchers.any(PageRequest.class),
+                        ArgumentMatchers.anyLong(),
+                        ArgumentMatchers.eq(DateUtilTest.DATE_2019),
+                        ArgumentMatchers.eq(DateUtilTest.DATE_2020),
+                        ArgumentMatchers.eq("Fulano")))
+                .willReturn(transferenciaSWithOperatorAnd2020);
+
     }
 
     @Test
-    @DisplayName("return pageable of List transferencias in conta with the contaId")
+    @DisplayName("return pageable of List transferencias based in contaId")
     void listByContaWithContaId_ReturnsListOfTransfer_WhenSuccessful() {
         Conta conta = ContaCreator.createConta();
 
@@ -86,7 +103,7 @@ class TransferenciaServiceTest {
     }
 
     @Test
-    @DisplayName("return pageable of transfers of conta with the contaId and the operator")
+    @DisplayName("return pageable of List transferencias based in contaId and the operador")
     void listByContaWithContaIdAndOperator_ReturnsListOfTransfer_WhenSuccessful() {
         Conta conta = ContaCreator.createConta();
 
@@ -100,5 +117,49 @@ class TransferenciaServiceTest {
         Assertions.assertThat(transferencias.toList().get(0).getValor()).isEqualTo(new BigDecimal("30895.46"));
         Assertions.assertThat(transferencias.toList().get(0).getNomeOperadorTransacao()).isEqualTo("Beltrano");
     }
+
+    @Test
+    @DisplayName("return pageable of List transferencias based in contaId and date range")
+    void listByContaWithContaIdAndDataTransferenciaBetween_ReturnsListOfTransfer_WhenSuccessful() {
+        Conta conta = ContaCreator.createConta();
+
+        Page<TransferenciaDTO> transferencias = transferenciaService
+                .listTransferenciasByConta_IdAndDataTransferenciaBetween(
+                        PageRequest.of(0, 5),
+                        conta.getId(),
+                        LocalDate.parse("2019-01-01"),
+                        LocalDate.parse("2020-01-01"));
+
+        Assertions.assertThat(transferencias.toList()).isNotNull().isNotEmpty().hasSize(1);
+        Assertions.assertThat(transferencias.toList().get(0).getValor()).isEqualTo(new BigDecimal("30895.46"));
+        Assertions.assertThat(transferencias.toList().get(0).getNomeOperadorTransacao()).isEqualTo("Beltrano");
+    }
+    @Test
+    @DisplayName("return pageable of List transferencias based in contaId, date range and operador")
+    void listByContaWithContaIdAndNomeOperadorTransacaoAndDataTransferenciaBetween_ReturnsListOfTransfer_WhenSuccessful() {
+        Conta conta = ContaCreator.createConta();
+
+        Page<TransferenciaDTO> transferencias = transferenciaService
+                .listTransferenciasByConta_IdAndNomeOperadorTransacaoAndDataTransferenciaBetween(
+                        PageRequest.of(0, 5),
+                        conta.getId(),
+                        LocalDate.parse("2019-01-01"),
+                        LocalDate.parse("2020-01-01"),
+                        TransferenciaCreator.transferenciaDTOSWithOperatorAnd2020().getNomeOperadorTransacao());
+
+        Assertions.assertThat(transferencias.toList()).isNotNull().isNotEmpty().hasSize(1);
+        Assertions.assertThat(transferencias.toList().get(0).getValor()).isEqualTo(new BigDecimal("30895.46"));
+        Assertions.assertThat(transferencias.toList().get(0).getNomeOperadorTransacao()).isEqualTo("Beltrano");
+    }
+
+    @Test
+    @DisplayName("findByIdOrThrowBadRequestException throws BadRequestException when conta is not found")
+    void findByIdOrThrowBadRequestException_ThrowsBadRequestException_WhenAnimeIsNotFound(){
+        Conta conta = ContaCreator.createContaInexistente();
+
+        Assertions.assertThatExceptionOfType(BadRequestException.class)
+                .isThrownBy(() -> transferenciaService.listByContaId(null , conta.getId()));
+    }
+
 
 }

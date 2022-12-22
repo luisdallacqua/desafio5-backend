@@ -1,11 +1,22 @@
 package br.com.banco.util;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
 
-public class DateFormatter {
+public class DateUtilTest {
+
+    public static final ZonedDateTime DATE_2020 = ZonedDateTime.of(
+            LocalDateTime.of(2020, 1, 1, 0, 0, 0),
+            ZoneId.systemDefault()
+    );
+    public static final ZonedDateTime DATE_2019 = ZonedDateTime.of(
+            LocalDateTime.of(2019, 1, 1, 0, 0, 0),
+            ZoneId.systemDefault()
+    );
+
     public static ZonedDateTime formatDateToZonaDateTime(String dateStr){
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
         LocalDate date = LocalDate.parse(dateStr, formatter);

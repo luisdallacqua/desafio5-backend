@@ -3,7 +3,6 @@ package br.com.banco.exceptions;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.lang.Nullable;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
@@ -19,9 +18,9 @@ import java.util.stream.Collectors;
 public class ExceptionsHandler extends ResponseEntityExceptionHandler {
 
     @ExceptionHandler(BadRequestException.class)
-    public ResponseEntity<ExcecaoContaNaoEncontrada> handleBadRequestException(BadRequestException badRequestException) {
+    public ResponseEntity<NotFoundException> handleBadRequestException(BadRequestException badRequestException) {
         return new ResponseEntity<>(
-                ExcecaoContaNaoEncontrada.builder()
+                NotFoundException.builder()
                         .timestamp(LocalDateTime.now())
                         .status(HttpStatus.BAD_REQUEST.value())
                         .title("Requisição má feita. Cheque a documentação para mais informações")
@@ -42,25 +41,12 @@ public class ExceptionsHandler extends ResponseEntityExceptionHandler {
                 ValidationExceptionDetails.builder()
                         .timestamp(LocalDateTime.now())
                         .status(HttpStatus.BAD_REQUEST.value())
-                        .title("Bad Request Exception. Invalid Fields")
-                        .details("Check the field(s) error")
+                        .title("Requisição má feita. Campos inválidos")
+                        .details("Cheque o(s) erro(s) do(s) campo(s)")
                         .developerMessage(exception.getClass().getName())
                         .fields(fields)
                         .fieldsMessage(fieldsMessages)
                         .build(), HttpStatus.BAD_REQUEST);
     }
 
-//    @Override
-//    protected ResponseEntity<Object> handleExceptionInternal(
-//            Exception ex, @Nullable Object body, HttpHeaders headers, HttpStatus status, WebRequest request) {
-//        ExceptionDetails exceptionDetails = ExceptionDetails.builder()
-//                .timestamp(LocalDateTime.now())
-//                .status(status.value())
-//                .title(ex.getCause().getMessage())
-//                .details(ex.getMessage())
-//                .developerMessage(ex.getClass().getName())
-//                .build();
-//
-//        return new ResponseEntity<>(exceptionDetails, headers, status);
-//    }
 }

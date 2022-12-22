@@ -21,7 +21,7 @@ import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.List;
 
-import static br.com.banco.util.DateFormatter.*;
+import static br.com.banco.util.DateUtilTest.*;
 
 @ExtendWith(SpringExtension.class)
 class TransferenciaControllerTest {
