@@ -3,7 +3,6 @@ package br.com.banco.service;
 import br.com.banco.dto.Transferencia.TransferenciaDTO;
 import br.com.banco.exceptions.BadRequestException;
 import br.com.banco.mapper.TransferenciaMapper;
-import br.com.banco.model.Transferencia;
 import br.com.banco.repository.ContaRepository;
 import br.com.banco.repository.TransferenciaRepository;
 import lombok.RequiredArgsConstructor;
@@ -67,6 +66,6 @@ public class TransferenciaService {
                         operador,
                         dataInicio.atStartOfDay(ZoneId.systemDefault()),
                         dataFim.atStartOfDay(ZoneId.systemDefault())
-                        ));
+                ));
     }
 }
