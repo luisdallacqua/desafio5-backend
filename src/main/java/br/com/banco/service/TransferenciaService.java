@@ -21,14 +21,6 @@ public class TransferenciaService {
     private final TransferenciaRepository transferenciaRepository;
     private final ContaRepository contaRepository;
 
-    public Transferencia create(Transferencia transferencia) {
-        return transferenciaRepository.save(transferencia);
-    }
-
-    public Page<TransferenciaDTO> listAll(Pageable pageable) {
-        return TransferenciaMapper.INSTANCE.toRest(transferenciaRepository.findAll(pageable));
-    }
-
     public Page<TransferenciaDTO> listByContaId(Pageable pageable, Long id) {
         contaRepository.findById(id).orElseThrow(() -> new BadRequestException("Não existe usuário com esse id"));
         return TransferenciaMapper.INSTANCE.toRest(transferenciaRepository.findTransferenciasByConta_Id(pageable, id));

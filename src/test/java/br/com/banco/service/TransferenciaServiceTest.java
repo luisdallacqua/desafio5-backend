@@ -156,7 +156,7 @@ class TransferenciaServiceTest {
 
     @Test
     @DisplayName("findByIdOrThrowBadRequestException throws BadRequestException when conta is not found")
-    void findByIdOrThrowBadRequestException_ThrowsBadRequestException_WhenAnimeIsNotFound() {
+    void findByIdOrThrowBadRequestException_ThrowsBadRequestException_WhenTransferenciaIsNotFound() {
         Conta conta = ContaCreator.createContaInexistente();
 
         Assertions.assertThatExceptionOfType(BadRequestException.class)

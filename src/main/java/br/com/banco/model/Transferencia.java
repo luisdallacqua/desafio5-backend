@@ -6,6 +6,7 @@ import lombok.*;
 import javax.persistence.*;
 import javax.validation.constraints.Digits;
 import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 import java.math.BigDecimal;
 import java.time.ZonedDateTime;
 
@@ -25,11 +26,12 @@ public class Transferencia {
     @Schema(description = "This is the date transfer field", example = "2020-12-31", required = true)
     private ZonedDateTime dataTransferencia;
     @Column(nullable = false)
-    @Digits(integer = 10, fraction = 2)
+    @Digits(integer = 20, fraction = 2)
     @Schema(description = "This is the amount of transfer", example = "2000.02", required = true)
     private BigDecimal valor;
 
     @NotNull(message = "Tipo da transção não pode ser nulo")
+    @Size(max = 15)
     @Schema(description = "This is the type of transfer, that can be: TRANFERENCIA, DEPOSITO, SAQUE",
             example = "TRANSFERENCIA",
             required = true)

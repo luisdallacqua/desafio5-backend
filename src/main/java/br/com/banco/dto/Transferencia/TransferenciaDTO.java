@@ -1,6 +1,8 @@
 package br.com.banco.dto.Transferencia;
 
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
 
 import javax.persistence.Column;
 import javax.validation.constraints.Digits;

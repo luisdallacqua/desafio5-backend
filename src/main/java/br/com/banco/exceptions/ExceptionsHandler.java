@@ -22,31 +22,11 @@ public class ExceptionsHandler extends ResponseEntityExceptionHandler {
         return new ResponseEntity<>(
                 NotFoundException.builder()
                         .timestamp(LocalDateTime.now())
-                        .status(HttpStatus.BAD_REQUEST.value())
+                        .status(HttpStatus.NOT_FOUND.value())
                         .title("Requisição má feita. Cheque a documentação para mais informações")
                         .details(badRequestException.getMessage())
                         .developerMessage(badRequestException.getClass().getName())
-                        .build(), HttpStatus.BAD_REQUEST);
-    }
-
-    @Override
-    protected ResponseEntity<Object> handleMethodArgumentNotValid(
-            MethodArgumentNotValidException exception, HttpHeaders headers, HttpStatus status, WebRequest request) {
-
-        List<FieldError> fieldErrors = exception.getBindingResult().getFieldErrors();
-        String fields = fieldErrors.stream().map(FieldError::getField).collect(Collectors.joining(", "));
-        String fieldsMessages = fieldErrors.stream().map(FieldError::getDefaultMessage).collect(Collectors.joining(", "));
-
-        return new ResponseEntity<>(
-                ValidationExceptionDetails.builder()
-                        .timestamp(LocalDateTime.now())
-                        .status(HttpStatus.BAD_REQUEST.value())
-                        .title("Requisição má feita. Campos inválidos")
-                        .details("Cheque o(s) erro(s) do(s) campo(s)")
-                        .developerMessage(exception.getClass().getName())
-                        .fields(fields)
-                        .fieldsMessage(fieldsMessages)
-                        .build(), HttpStatus.BAD_REQUEST);
+                        .build(), HttpStatus.NOT_FOUND);
     }
 
 }

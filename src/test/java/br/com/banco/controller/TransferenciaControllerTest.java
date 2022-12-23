@@ -40,9 +40,6 @@ class TransferenciaControllerTest {
         PageImpl<TransferenciaDTO> transferenciaDTOSWithOperatorAnd2020 = new PageImpl<>(
                 List.of(TransferenciaCreator.transferenciaDTOSWithOperatorAnd2020()));
 
-        BDDMockito.when(transferenciaService.create(ArgumentMatchers.any(Transferencia.class)))
-                .thenReturn(TransferenciaCreator.createTransferencia());
-
         BDDMockito.when(transferenciaService.listByContaId(
                         ArgumentMatchers.any(),
                         ArgumentMatchers.eq(1L)))
@@ -118,7 +115,7 @@ class TransferenciaControllerTest {
                         contaId,
                         LocalDate.parse("2020-01-01"),
                         LocalDate.parse("2022-01-01"),
-                        "Fulano")
+                        "")
                 .getBody();
 
         Assertions.assertThat(transferencias.toList()).isNotNull().isNotEmpty().hasSize(1);
